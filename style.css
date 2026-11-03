@@ -11,23 +11,19 @@ body {
 }
 
 main {
-  max-width: 1100px;
+  max-width: 720px;
   margin: 2rem auto;
   padding: 0 1rem 3rem;
 }
 
 h1 {
   font-size: 1.6rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.35rem;
 }
 
-h2 {
-  font-size: 1.2rem;
-  margin: 0 0 0.75rem;
-}
-
-.panel {
-  margin-bottom: 2.5rem;
+.lead {
+  margin: 0 0 1.25rem;
+  color: #444;
 }
 
 button {
@@ -49,99 +45,19 @@ button:disabled {
   cursor: not-allowed;
 }
 
-#stationsStatus,
-#datasetsStatus,
-#dataStatus {
+#status {
   min-height: 1.5em;
   color: #444;
 }
 
-#dataForm {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem 1rem;
-  align-items: flex-end;
-  margin-bottom: 0.75rem;
+#gifContainer {
+  margin-top: 0.75rem;
 }
 
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  min-width: 140px;
-}
-
-.field label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #334155;
-}
-
-.field input {
-  padding: 0.45rem 0.65rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
+#gifContainer img {
+  display: block;
+  max-width: 100%;
+  height: auto;
   background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  margin-top: 0.5rem;
-}
-
-th,
-td {
-  padding: 0.65rem 0.85rem;
-  text-align: left;
-  border-bottom: 1px solid #e5e5e5;
-  vertical-align: top;
-}
-
-th {
-  background: #1e293b;
-  color: #fff;
-  font-weight: 600;
-}
-
-tbody tr:hover {
-  background: #f8fafc;
-}
-
-td:nth-child(3) {
-  max-width: 28rem;
-}
-
-.badge {
-  display: inline-block;
-  padding: 0.15rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.badge-współczesny {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.badge-historyczny {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.badge-nieznany {
-  background: #e5e7eb;
-  color: #374151;
-}
-
-.dataset-historyczny {
-  background: #fffbeb;
-}
-
-.dataset-współczesny {
-  background: #f0fdf4;
 }
