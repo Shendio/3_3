@@ -98,16 +98,43 @@
 
   loadGifBtn.addEventListener('click', loadRandomGif)
 
-  // --- 3.3.2 wyszukiwanie ---
+  // --- 3.3.2 / 3.3.3 wyszukiwanie + paginacja ---
 
   const searchForm = document.getElementById('searchForm')
   const searchBtn = document.getElementById('searchBtn')
   const queryInput = document.getElementById('query')
   const searchStatus = document.getElementById('searchStatus')
   const results = document.getElementById('results')
+  const pagination = document.getElementById('pagination')
+  const prevBtn = document.getElementById('prevBtn')
+  const nextBtn = document.getElementById('nextBtn')
+  const pageInfo = document.getElementById('pageInfo')
+
+  let lastQuery = ''
+  let offset = 0
 
   function clearResults() {
     results.innerHTML = ''
+  }
+
+  function updatePagination(pageLength) {
+    const page = Math.floor(offset / SEARCH_LIMIT) + 1
+    const hasPrev = offset > 0
+    // ostatnia strona może mieć mniej niż limit wyników
+    const hasNext = pageLength >= SEARCH_LIMIT
+
+    pagination.hidden = !lastQuery || pageLength === 0 && offset === 0
+    prevBtn.disabled = !hasPrev
+    nextBtn.disabled = !hasNext
+    pageInfo.textContent =
+      'Strona ' + page + ' · offset ' + offset
+  }
+
+  function hidePagination() {
+    pagination.hidden = true
+    prevBtn.disabled = true
+    nextBtn.disabled = true
+    pageInfo.textContent = ''
   }
 
   function renderSearchResults(gifs) {
@@ -124,19 +151,23 @@
     })
   }
 
-  searchForm.addEventListener('submit', function (event) {
-    event.preventDefault()
-
-    const query = queryInput.value.trim()
-    if (!query) {
+  function searchGifs() {
+    if (!lastQuery) {
       searchStatus.textContent = 'Wpisz frazę do wyszukania.'
       clearResults()
+      hidePagination()
       return
+    }
+
+    if (offset < 0) {
+      offset = 0
     }
 
     searchStatus.textContent = 'Wyszukiwanie…'
     clearResults()
     searchBtn.disabled = true
+    prevBtn.disabled = true
+    nextBtn.disabled = true
 
     let apiKey
     try {
@@ -144,6 +175,7 @@
     } catch (error) {
       searchStatus.textContent = error.message
       searchBtn.disabled = false
+      hidePagination()
       return
     }
 
@@ -152,9 +184,11 @@
       '?api_key=' +
       encodeURIComponent(apiKey) +
       '&q=' +
-      encodeURIComponent(query) +
+      encodeURIComponent(lastQuery) +
       '&limit=' +
       SEARCH_LIMIT +
+      '&offset=' +
+      offset +
       '&rating=g'
 
     fetch(url)
@@ -164,19 +198,60 @@
 
         if (!gifs.length) {
           clearResults()
-          searchStatus.textContent = 'Brak wyników'
+          if (offset === 0) {
+            searchStatus.textContent = 'Brak wyników'
+            hidePagination()
+          } else {
+            // cofnięcie, gdy offset wyszedł poza dostępne wyniki
+            offset = Math.max(0, offset - SEARCH_LIMIT)
+            searchStatus.textContent = 'Brak dalszych wyników.'
+            updatePagination(0)
+          }
           return
         }
 
         renderSearchResults(gifs)
-        searchStatus.textContent = 'Znaleziono: ' + gifs.length
+        searchStatus.textContent =
+          'Wyświetlono: ' +
+          gifs.length +
+          ' (fraza: „' +
+          lastQuery +
+          '”)'
+        updatePagination(gifs.length)
       })
       .catch(function (error) {
         clearResults()
+        hidePagination()
         searchStatus.textContent = networkErrorMessage(error)
       })
       .finally(function () {
         searchBtn.disabled = false
       })
+  }
+
+  searchForm.addEventListener('submit', function (event) {
+    event.preventDefault()
+
+    const query = queryInput.value.trim()
+    if (!query) {
+      searchStatus.textContent = 'Wpisz frazę do wyszukania.'
+      clearResults()
+      hidePagination()
+      return
+    }
+
+    lastQuery = query
+    offset = 0
+    searchGifs()
+  })
+
+  prevBtn.addEventListener('click', function () {
+    offset = Math.max(0, offset - SEARCH_LIMIT)
+    searchGifs()
+  })
+
+  nextBtn.addEventListener('click', function () {
+    offset = offset + SEARCH_LIMIT
+    searchGifs()
   })
 })()

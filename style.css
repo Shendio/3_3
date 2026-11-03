@@ -102,3 +102,24 @@ button:disabled {
   background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.pagination button {
+  background: #334155;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #1e293b;
+}
+
+#pageInfo {
+  color: #444;
+  font-size: 0.95rem;
+}
