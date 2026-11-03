@@ -3,17 +3,38 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Losowy GIF — GIPHY</title>
+    <title>GIPHY — GIF-y</title>
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <main>
-      <h1>Losowy GIF</h1>
-      <p class="lead">Pobiera jeden GIF z endpointu <code>/random</code> GIPHY Public API.</p>
+      <h1>GIPHY Public API</h1>
 
-      <button type="button" id="loadGifBtn">Pokaż losowy GIF</button>
-      <p id="status" aria-live="polite"></p>
-      <div id="gifContainer"></div>
+      <section class="panel" aria-labelledby="randomHeading">
+        <h2 id="randomHeading">3.3.1 Losowy GIF</h2>
+        <button type="button" id="loadGifBtn">Pokaż losowy GIF</button>
+        <p id="randomStatus" aria-live="polite"></p>
+        <div id="gifContainer"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="searchHeading">
+        <h2 id="searchHeading">3.3.2 Wyszukiwanie GIF-ów</h2>
+
+        <form id="searchForm">
+          <label for="query">Fraza:</label>
+          <input
+            type="text"
+            id="query"
+            name="query"
+            placeholder="np. funny cat"
+            required
+          >
+          <button type="submit" id="searchBtn">Szukaj</button>
+        </form>
+
+        <p id="searchStatus" aria-live="polite"></p>
+        <div id="results"></div>
+      </section>
     </main>
 
     <script src="config.js"></script>
